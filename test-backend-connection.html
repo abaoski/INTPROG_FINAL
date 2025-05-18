@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Backend Connection Test</title>
+    <script>
+        async function testBackendConnection() {
+            const resultDiv = document.getElementById('result');
+            try {
+                const response = await fetch('https://intprog-final-vdpz.onrender.com/', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                const data = await response.json();
+                resultDiv.innerHTML = `<div style="color: green">✅ Connection Successful! Response: ${JSON.stringify(data)}</div>`;
+            } catch (error) {
+                resultDiv.innerHTML = `<div style="color: red">❌ Connection Failed: ${error.message}</div>`;
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>Backend Connection Test</h1>
+    <button onclick="testBackendConnection()">Test Connection</button>
+    <div id="result"></div>
+</body>
+</html> 
