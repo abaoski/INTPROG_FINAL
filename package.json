@@ -7,16 +7,15 @@
     "npm": ">=8.0.0"
   },
   "scripts": {
-    "start": "cd Backend && npm start",
-    "build": "npm run build:frontend && npm run install:backend",
-    "build:frontend": "cd Frontend && npm install && npm run build",
-    "install:backend": "cd Backend && npm install",
-    "dev": "concurrently \"cd Backend && npm run start:dev\" \"cd Frontend && npm start\""
+    "start": "cd Backend && node server.js",
+    "build": "cd Backend && npm install",
+    "install-backend": "cd Backend && npm install",
+    "dev": "cd Backend && npm run start:dev"
   },
   "keywords": ["angular", "node", "express", "render"],
   "author": "",
   "license": "ISC",
-  "devDependencies": {
-    "concurrently": "^8.2.0"
+  "dependencies": {
+    "dotenv": "^16.3.1"
   }
 } 

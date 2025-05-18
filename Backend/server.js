@@ -1,5 +1,11 @@
 // Load environment variables from .env file
-require('dotenv').config();
+try {
+    require('dotenv').config();
+    console.log('Environment loaded from .env file');
+} catch (err) {
+    console.log('dotenv not available, using environment variables from system');
+}
+
 require('rootpath')();
 const express = require('express');
 const app = express();
