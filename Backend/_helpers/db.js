@@ -16,18 +16,18 @@ async function initialize() {
         console.log('Connecting to MySQL server...');
         console.log(`Database connection parameters: host=${host}, port=${port}, user=${user}, database=${database}`);
         
-        const connection = await mysql.createConnection({ 
+        // Create database if it doesn't exist
+        console.log('Checking database existence...');
+        const tempConnection = await mysql.createConnection({ 
             host, 
             port: parseInt(port, 10), 
             user, 
             password,
             connectTimeout: 30000
         });
-
-        // Create database if it doesn't exist
-        console.log('Checking database existence...');
-        await connection.query(`CREATE DATABASE IF NOT EXISTS \`${database}\`;`);
-        await connection.query(`USE \`${database}\`;`);
+        
+        await tempConnection.query(`CREATE DATABASE IF NOT EXISTS \`${database}\`;`);
+        await tempConnection.end();
         
         // Connect to db with Sequelize
         const sequelize = new Sequelize(database, user, password, { 
@@ -153,7 +153,6 @@ async function initialize() {
             throw syncError;
         }
         
-        await connection.end();
         return db;
     } catch (error) {
         console.error('Database initialization error:', error);
