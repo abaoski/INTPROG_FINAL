@@ -1,22 +1,14 @@
 {
-  "name": "angular-node-app",
+  "name": "backend-deployment",
   "version": "1.0.0",
-  "description": "Angular frontend with Node.js backend",
+  "description": "Backend API Deployment",
   "engines": {
     "node": ">=16.0.0",
     "npm": ">=8.0.0"
   },
   "scripts": {
-    "start": "cd Backend && node server.js",
-    "build": "cd Backend && npm install",
-    "install-backend": "cd Backend && npm install",
-    "dev": "cd Backend && npm run start:dev"
+    "start": "cd Backend && node start.js",
+    "build": "cd Backend && npm install"
   },
-  "keywords": ["angular", "node", "express", "render"],
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "dotenv": "^16.3.1",
-    "rootpath": "^0.1.2"
-  }
+  "dependencies": {}
 } 
