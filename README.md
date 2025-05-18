@@ -26,8 +26,8 @@ This project is configured to deploy only the backend API to Render. To deploy:
    - The MySQL database credentials are already configured in the render.yaml
    - For security, you'll need to add the DB_PASSWORD in the Render dashboard
    - Host: 153.92.15.31
-   - Database: u875409848_abao
-   - User: u875409848_abao
+   - Database: u875409848_patuasic
+   - User: u875409848_patuasic
 
 4. Access your API:
    - After deployment, your API will be available at https://backend-api.onrender.com/
