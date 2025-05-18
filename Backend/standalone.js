@@ -5,7 +5,7 @@ const fs = require('fs');
 const path = require('path');
 
 // Configuration
-const PORT = process.env.PORT || 10000;
+const PORT = process.env.PORT || 4000;
 let server = null;
 let dependenciesInstalled = false;
 

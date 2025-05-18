@@ -1,4 +1,4 @@
-const config = require('../config.json');
+const config = require('./config');
 const mysql = require('mysql2/promise');
 const { Sequelize } = require('sequelize');
 
@@ -14,9 +14,11 @@ async function initialize() {
         const { host, port, user, password, database } = config.database;
         
         console.log('Connecting to MySQL server...');
+        console.log(`Database connection parameters: host=${host}, port=${port}, user=${user}, database=${database}`);
+        
         const connection = await mysql.createConnection({ 
             host, 
-            port, 
+            port: parseInt(port, 10), 
             user, 
             password,
             connectTimeout: 30000
@@ -30,7 +32,7 @@ async function initialize() {
         // Connect to db with Sequelize
         const sequelize = new Sequelize(database, user, password, { 
             host,
-            port,
+            port: parseInt(port, 10),
             dialect: 'mysql',
             logging: console.log,
             pool: {
