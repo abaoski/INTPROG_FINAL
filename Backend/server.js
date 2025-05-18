@@ -22,6 +22,7 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const path = require('path');
+const fs = require('fs');
 
 // Handle require for middleware
 let errorHandler;
@@ -47,6 +48,15 @@ if (process.env.NODE_ENV !== 'production') {
     process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 }
 
+// Add simple health check route that responds immediately
+app.get('/', (req, res) => {
+    res.json({ 
+        status: 'API running',
+        time: new Date().toISOString(),
+        environment: process.env.NODE_ENV || 'development'
+    });
+});
+
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cookieParser());
@@ -62,8 +72,17 @@ const frontendPath = process.env.NODE_ENV === 'production'
     ? path.join(__dirname, '../Frontend/dist/frontend')
     : path.join(__dirname, '../frontend/dist/frontend');
 
-// Serve static files from the Angular app
-app.use(express.static(frontendPath));
+// Serve static files from the Angular app if the directory exists
+try {
+    if (fs.existsSync(frontendPath)) {
+        app.use(express.static(frontendPath));
+        console.log(`Serving static files from ${frontendPath}`);
+    } else {
+        console.log(`Frontend path ${frontendPath} not found, skipping static file serving`);
+    }
+} catch (err) {
+    console.error('Error checking frontend path:', err);
+}
 
 // allow cors requests from any origin and with credentials
 app.use(cors({
@@ -99,6 +118,32 @@ try {
     console.error('Error setting up API routes:', err);
 }
 
+// Add a diagnostic endpoint
+app.get('/diagnostic', (req, res) => {
+    // Check if we can load key dependencies
+    const diagnostics = {
+        time: new Date().toISOString(),
+        node_version: process.version,
+        environment: process.env.NODE_ENV || 'development',
+        working_directory: process.cwd(),
+        base_directory: __dirname,
+        modules: {}
+    };
+    
+    // Try to require key modules
+    const modules = ['express', 'rootpath', 'sequelize', 'mysql2', 'jsonwebtoken'];
+    for (const mod of modules) {
+        try {
+            require(mod);
+            diagnostics.modules[mod] = 'loaded';
+        } catch (err) {
+            diagnostics.modules[mod] = 'failed';
+        }
+    }
+    
+    res.json(diagnostics);
+});
+
 // Add 404 handler for debugging
 app.use((req, res, next) => {
     console.log(`404 Not Found: ${req.method} ${req.url}`);
@@ -113,9 +158,18 @@ try {
     app.use('/api-docs', (req, res) => res.status(503).json({ message: 'API documentation not available' }));
 }
 
-// Send all other requests to the Angular app
+// Send all other requests to the Angular app if the file exists
 app.get('*', (req, res) => {
-    res.sendFile(path.join(frontendPath, 'index.html'));
+    try {
+        const indexPath = path.join(frontendPath, 'index.html');
+        if (fs.existsSync(indexPath)) {
+            res.sendFile(indexPath);
+        } else {
+            res.status(404).json({ message: 'Frontend not available' });
+        }
+    } catch (err) {
+        res.status(500).json({ message: 'Error serving frontend', error: err.message });
+    }
 });
 
 // global error handler
