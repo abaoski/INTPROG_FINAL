@@ -1,0 +1,208 @@
+a {
+    cursor: pointer;
+}
+
+.app-container {
+    min-height: 320px;
+}
+
+/* Dropdown menu fix to prevent it from appearing behind containers */
+.dropdown-menu {
+    z-index: 9999 !important;
+    position: absolute !important;
+    transform: translateY(0) !important;
+    overflow: visible !important;
+}
+
+.btn-group {
+    position: relative;
+}
+
+/* Fix for table container to accommodate dropdown */
+.table-professional {
+    overflow: visible !important;
+}
+
+.table-professional tbody td {
+    overflow: visible !important;
+    position: relative;
+}
+
+/* Alert styles to make them more prominent */
+.alert {
+    position: relative;
+    padding: 1rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: 0.25rem;
+    font-size: 1rem;
+}
+
+.alert-container {
+    position: relative;
+    z-index: 9999;
+}
+
+.alert-info {
+    color: #055160;
+    background-color: #cff4fc;
+    border-color: #b6effb;
+}
+
+.alert-success {
+    color: #0f5132;
+    background-color: #d1e7dd;
+    border-color: #badbcc;
+}
+
+.alert-warning {
+    color: #664d03;
+    background-color: #fff3cd;
+    border-color: #ffecb5;
+}
+
+.alert-danger {
+    color: #842029;
+    background-color: #f8d7da;
+    border-color: #f5c2c7;
+}
+
+.alert-dismissable .close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 0.75rem 1.25rem;
+    color: inherit;
+    cursor: pointer;
+}
+
+.admin-nav {
+    padding-top: 0;
+    padding-bottom: 0;
+    background-color: #e8e9ea;
+    border-bottom: 1px solid #ccc;
+}
+
+.btn-delete-account {
+    width: 40px;
+    text-align: center;
+    box-sizing: content-box;
+}
+
+/* Badge Styles */
+.badge {
+    font-size: 1rem !important;
+    padding: 0.5rem 0.6rem !important;
+}
+
+/* Custom badge colors */
+.badge.bg-info {
+    color: white !important;
+    background-color: #17a2b8 !important;
+}
+
+.badge.bg-success {
+    color: #fff !important;
+    background-color: #28a745 !important;
+}
+
+/* Table Styles */
+td, th {
+    text-align: center !important;
+    vertical-align: middle !important;
+}
+
+/* Professional Table Styling */
+.table-professional {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+.table-professional thead th {
+    background-color: #f8f9fa;
+    color: #495057;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 12px 16px;
+    border-bottom: 2px solid #dee2e6;
+    position: relative;
+}
+
+.table-professional tbody tr {
+    transition: all 0.2s ease;
+}
+
+.table-professional tbody tr:hover {
+    background-color: rgba(0, 123, 255, 0.05) !important;
+}
+
+.table-professional tbody td {
+    padding: 12px 16px;
+    vertical-align: middle;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.table-professional-striped tbody tr:nth-of-type(odd) {
+    background-color: rgba(0, 0, 0, 0.02);
+}
+
+/* Color variants */
+.table-professional-primary thead th {
+    background-color: #e6f2ff;
+    color: #0056b3;
+    border-bottom: 2px solid #0056b3;
+}
+
+.table-professional-success thead th {
+    background-color: #e6f7ef;
+    color: #198754;
+    border-bottom: 2px solid #198754;
+}
+
+.table-professional-info thead th {
+    background-color: #e6f9ff;
+    color: #0dcaf0;
+    border-bottom: 2px solid #0dcaf0;
+}
+
+/* Badge styling for status indicators */
+.badge-status {
+    padding: 6px 10px;
+    border-radius: 50px;
+    font-weight: 500;
+    font-size: 12px;
+}
+
+.badge-status-success {
+    background-color: #d1e7dd;
+    color: #0f5132;
+}
+
+.badge-status-info {
+    background-color: #cff4fc;
+    color: #055160;
+}
+
+.badge-status-warning {
+    background-color: #fff3cd;
+    color: #664d03;
+}
+
+.badge-status-danger {
+    background-color: #f8d7da;
+    color: #842029;
+}
+
+/* Table responsiveness */
+@media (max-width: 768px) {
+    .table-professional {
+        display: block;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+}

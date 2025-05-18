@@ -1,0 +1,15 @@
+<!-- Alert container positioned to avoid overlapping modals -->
+<div class="global-alerts" style="position: fixed; bottom: 20px; right: 20px; z-index: 1040; max-width: 400px; margin: 0 auto;">
+    <!-- Always show this static test alert if there are no other alerts -->
+    <div *ngIf="!alerts.length" class="alert alert-info alert-dismissable" style="display: none;">
+        <a class="close" style="cursor: pointer; float: right; margin-left: 15px;">&times;</a>
+        <span>Test alert - if you see this, alerts are working</span>
+    </div>
+    
+    <!-- Dynamic alerts -->
+    <div *ngFor="let alert of alerts" class="{{cssClasses(alert)}}" 
+         style="margin-bottom: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); border-left: 5px solid #007bff;">
+        <a class="close" (click)="removeAlert(alert)" style="cursor: pointer; float: right; margin-left: 15px; font-size: 1.5rem;">&times;</a>
+        <span [innerHTML]="alert.message"></span>
+    </div>
+</div>

@@ -1,0 +1,60 @@
+<div class="container">
+<h1>Accounts</h1>
+    
+    <div class="card">
+        <div class="card-header">
+            <div class="d-flex justify-content-between align-items-center">
+                <h2 class="mb-0">Manage Accounts</h2>
+                <a routerLink="add" class="btn btn-success">Create Account</a>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-professional table-professional-primary table-professional-striped">
+    <thead>
+        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Status</th>
+                            <th>Role</th>
+                            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let account of accounts">
+            <td>{{account.title}} {{account.firstName}} {{account.lastName}}</td>
+            <td>{{account.email}}</td>
+                            <td>
+                                <span class="badge-status" [ngClass]="{
+                                    'badge-status-success': account.status === 'Active',
+                                    'badge-status-warning': account.status === 'Pending',
+                                    'badge-status-danger': account.status === 'Inactive'
+                                }">{{account.status}}</span>
+                            </td>
+                            <td>
+                                <span class="badge-status" [ngClass]="{
+                                    'badge-status-info': account.role === 'User',
+                                    'badge-status-success': account.role === 'Admin',
+                                    'badge-status-warning': account.role === 'Moderator'
+                                }">{{account.role}}</span>
+                            </td>
+                            <td>
+                                <a routerLink="edit/{{account.id}}" class="btn btn-sm btn-primary me-1">Edit</a>
+                <!-- <button (click)="deleteAccount(account.id)" class="btn btn-sm btn-danger btn-delete-account"
+                    [disabled]="account.isDeleting">
+                    <span *ngIf="account.isDeleting" class="spinner-border spinner-border-sm"></span>
+                    <span *ngIf="!account.isDeleting">Delete</span>
+                </button> -->
+            </td>
+        </tr>
+        <tr *ngIf="!accounts">
+                            <td colspan="5" class="text-center">
+                <span class="spinner-border spinner-border-lg align-center"></span>
+            </td>
+        </tr>
+    </tbody>
+</table>
+            </div>
+        </div>
+    </div>
+</div> 
