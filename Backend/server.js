@@ -86,7 +86,7 @@ try {
 
 // allow cors requests from any origin and with credentials
 app.use(cors({
-    origin: true, // Allow all origins
+    origin: ['https://intprog-final-61416.web.app', 'http://localhost:4200'],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'cache-control', 'Cookie', 'X-Requested-With', 'pragma']
