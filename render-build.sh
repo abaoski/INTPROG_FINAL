@@ -5,46 +5,38 @@ set -o errexit
 echo "Node version: $(node -v)"
 echo "NPM version: $(npm -v)"
 
-echo "Installing backend dependencies..."
+# Change to the Backend directory and stay there for all commands
 cd Backend
-
-# Ensure .npmrc exists
-if [ ! -f ".npmrc" ]; then
-  echo "Creating .npmrc file..."
-  echo "registry=https://registry.npmjs.org/" > .npmrc
-  echo "legacy-peer-deps=true" >> .npmrc
-  echo "package-lock=false" >> .npmrc
-  echo "save-exact=true" >> .npmrc
-  echo "progress=false" >> .npmrc
-fi
+echo "Changed to Backend directory: $(pwd)"
 
 # Clean up
+echo "Cleaning up any existing package-lock.json..."
 rm -f package-lock.json
+
+# Install all dependencies from package.json
+echo "Installing ALL dependencies from Backend/package.json..."
 npm cache clean --force
+npm install
 
-# Install dependencies
-echo "Installing dependencies from package.json..."
-npm install --no-optional
+# List installed modules to verify
+echo "Installed modules in Backend/node_modules:"
+ls -la node_modules | head -n 10
+echo "..."
 
-# Verify key dependencies exist
-echo "Verifying express is installed..."
-if [ ! -d "node_modules/express" ]; then
-  echo "Express not found, installing directly..."
+# Verify specific key packages are installed
+if [ -d "node_modules/express" ]; then
+  echo "Express package installed successfully"
+else
+  echo "Express package missing, installing it directly..."
   npm install express --save
 fi
 
-echo "Verifying dotenv is installed..."
-if [ ! -d "node_modules/dotenv" ]; then
-  echo "Dotenv not found, installing directly..."
-  npm install dotenv --save
-fi
-
-echo "Verifying rootpath is installed..."
-if [ ! -d "node_modules/rootpath" ]; then
-  echo "Rootpath not found, installing directly..."
+if [ -d "node_modules/rootpath" ]; then
+  echo "Rootpath package installed successfully"
+else
+  echo "Rootpath package missing, installing it directly..."
   npm install rootpath --save
 fi
 
-echo "Backend dependencies installed successfully."
-ls -la node_modules | head -n 10
-echo "..." 
+echo "All dependencies have been installed in Backend/node_modules"
+echo "Build completed successfully" 

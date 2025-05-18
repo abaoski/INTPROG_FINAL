@@ -3,7 +3,7 @@ services:
     name: backend-api
     env: node
     buildCommand: chmod +x render-build.sh && ./render-build.sh
-    startCommand: cd Backend && node entry.js
+    startCommand: cd Backend && node server.js
     healthCheckPath: /
     envVars:
       - key: NODE_ENV
