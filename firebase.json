@@ -1,0 +1,32 @@
+{
+  "hosting": {
+    "public": "Frontend/dist/frontend",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ],
+    "target": "default"
+  },
+  "hosting": {
+    "target": "fake",
+    "public": "Frontend/dist/frontend-fake",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  }
+} 
