@@ -1,5 +1,5 @@
 export const environment = { 
   production: true, 
-  apiUrl: "https://backend-api.onrender.com",
+  apiUrl: "https://intprog-final.onrender.com",
   useFakeBackend: true  // Use fake backend in production
 }; 

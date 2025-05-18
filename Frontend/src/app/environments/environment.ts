@@ -4,7 +4,7 @@
 
 export const environment = {
     production: false,
-    apiUrl: 'http://localhost:4000',
+    apiUrl: 'https://intprog-final.onrender.com',
     useFakeBackend: false // Set to true to use fake backend, false to use real backend
 };
 
