@@ -3,6 +3,6 @@
 
 export const environment = {
   production: false,
-  apiUrl: "https://intprog-final-hak0.onrender.com  ",
+  apiUrl: "https://intprog-final-hak0.onrender.com",
   useFakeBackend: false  // Use real backend in development
 }; 
