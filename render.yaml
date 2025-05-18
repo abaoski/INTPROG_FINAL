@@ -17,9 +17,9 @@ services:
       - key: DB_PORT
         value: 3306
       - key: DB_USER
-        value: u875409848_abao
+        value: u875409848_balberos
       - key: DB_PASSWORD
         sync: false
       - key: DB_NAME
-        value: u875409848_abao
+        value: u875409848_balberos
     autoDeploy: true 

@@ -18,8 +18,8 @@ app.get('/', (req, res) => {
 app.get('/db-info', (req, res) => {
   res.json({
     host: process.env.DB_HOST || '153.92.15.31',
-    database: process.env.DB_NAME || 'u875409848_abao',
-    user: process.env.DB_USER || 'u875409848_abao'
+    database: process.env.DB_NAME || 'u875409848_balberos',
+    user: process.env.DB_USER || 'u875409848_balberos'
   });
 });
 

@@ -2,9 +2,9 @@
   "database": {
     "host": "${process.env.DB_HOST || '153.92.15.31'}",
     "port": "${process.env.DB_PORT || 3306}",
-    "user": "${process.env.DB_USER || 'u875409848_abao'}",
+    "user": "${process.env.DB_USER || 'u875409848_balberos'}",
     "password": "${process.env.DB_PASSWORD || '9T2Z5$3UKkgSYzE'}",
-    "database": "${process.env.DB_NAME || 'u875409848_abao'}"
+    "database": "${process.env.DB_NAME || 'u875409848_balberos'}"
   },
   "secret": "${process.env.JWT_SECRET || 'YOUR_JWT_SECRET_KEY_HERE'}",
   "emailFrom": "${process.env.EMAIL_FROM || 'admin@example.com'}",
