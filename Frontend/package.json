@@ -8,6 +8,7 @@
     "start:real": "ng serve --open --configuration=development",
     "start:fake": "ng serve --open --configuration=test",
     "build": "ng build",
+    "build:fake": "ng build --configuration=production-fake --output-path=dist/frontend-fake",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"

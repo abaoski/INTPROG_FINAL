@@ -45,6 +45,27 @@
                             ],
                             "outputHashing": "all"
                         },
+                        "production-fake": {
+                            "budgets": [
+                                {
+                                    "type": "initial",
+                                    "maximumWarning": "500kb",
+                                    "maximumError": "1mb"
+                                },
+                                {
+                                    "type": "anyComponentStyle",
+                                    "maximumWarning": "2kb",
+                                    "maximumError": "4kb"
+                                }
+                            ],
+                            "fileReplacements": [
+                                {
+                                    "replace": "src/environments/environment.prod.ts",
+                                    "with": "src/environments/environment.prod.fake.ts"
+                                }
+                            ],
+                            "outputHashing": "all"
+                        },
                         "development": {
                             "optimization": false,
                             "extractLicenses": false,
@@ -73,6 +94,9 @@
                     "configurations": {
                         "production": {
                             "browserTarget": "frontend:build:production"
+                        },
+                        "production-fake": {
+                            "browserTarget": "frontend:build:production-fake"
                         },
                         "development": {
                             "browserTarget": "frontend:build:development"

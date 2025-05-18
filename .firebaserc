@@ -1,0 +1,16 @@
+{
+  "projects": {
+    "default": "intprog-final-15315",
+    "intprog": "intprog-final-15315"
+  },
+  "targets": {
+    "intprog-final-15315": {
+      "hosting": {
+        "fake": [
+          "intprog-final-15315"
+        ]
+      }
+    }
+  },
+  "etags": {}
+}
