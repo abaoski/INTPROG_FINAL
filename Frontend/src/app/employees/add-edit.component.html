@@ -1,0 +1,123 @@
+<div class="container">
+    <h1 class="mb-4">{{isAddMode ? 'Add New' : 'Edit'}} Employee</h1>
+    <div class="card">
+        <div class="card-body">
+            <form [formGroup]="form" (ngSubmit)="onSubmit()">
+                <!-- Account Selection & Employee ID -->
+                <div class="row mb-4">
+                    <div class="col-md-6 mb-3" *ngIf="isAddMode">
+                        <label class="form-label fw-bold">Account</label>
+                        <select formControlName="accountId" class="form-select" [ngClass]="{ 'is-invalid': submitted && f.accountId.errors }">
+                            <option value="">Select Account...</option>
+                            <option *ngFor="let account of availableAccounts" [value]="account.id">
+                                {{account.firstName}} {{account.lastName}}
+                            </option>
+                        </select>
+                        <div *ngIf="submitted && f.accountId.errors" class="invalid-feedback">
+                            <div *ngIf="f.accountId.errors.required">Account is required</div>
+                        </div>
+                        <small class="form-text text-muted">Select the user account to associate with this employee</small>
+                    </div>
+
+                    <div [class]="isAddMode ? 'col-md-6' : 'col-md-12'">
+                        <label class="form-label fw-bold">Employee ID</label>
+                        <div class="input-group mb-2">
+                            <input type="text" formControlName="employeeId" class="form-control" 
+                                [ngClass]="{ 'is-invalid': submitted && f.employeeId.errors }" 
+                                placeholder="Enter employee ID" />
+                            <span class="input-group-text bg-light" *ngIf="selectedAccountName">{{selectedAccountName | titlecase}}</span>
+                        </div>
+                        <div *ngIf="submitted && f.employeeId.errors" class="invalid-feedback d-block">
+                            <div *ngIf="f.employeeId.errors.required">Employee ID is required</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Department & Position -->
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">Department</label>
+                        <select formControlName="departmentId" class="form-select" [ngClass]="{ 'is-invalid': submitted && f.departmentId.errors }">
+                            <option value="">Select Department...</option>
+                            <option *ngFor="let dept of departments" [value]="dept.id">
+                                {{dept.name}}
+                            </option>
+                        </select>
+                        <div *ngIf="submitted && f.departmentId.errors" class="invalid-feedback">
+                            <div *ngIf="f.departmentId.errors.required">Department is required</div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">Position</label>
+                        <input type="text" formControlName="position" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.position.errors }" placeholder="Enter position" />
+                        <div *ngIf="submitted && f.position.errors" class="invalid-feedback">
+                            <div *ngIf="f.position.errors.required">Position is required</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hire Date & Status -->
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">Hire Date</label>
+                        <input type="date" formControlName="hireDate" class="form-control" 
+                            [ngClass]="{ 'is-invalid': submitted && f.hireDate.errors }" 
+                            [readonly]="!isAddMode" />
+                        <div *ngIf="submitted && f.hireDate.errors" class="invalid-feedback">
+                            <div *ngIf="f.hireDate.errors.required">Hire Date is required</div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">Status</label>
+                        <select formControlName="status" class="form-select">
+                            <option value="Active">Active</option>
+                            <option value="Inactive">Inactive</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Submit Buttons -->
+                <div class="border-top pt-3">
+                    <div class="btn-group">
+                        <button [disabled]="loading" class="btn btn-primary">
+                            <span *ngIf="loading" class="spinner-border spinner-border-sm me-1"></span>
+                            Save Employee
+                        </button>
+                    </div>
+                    <a routerLink="/employees" class="btn btn-secondary ms-2">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" [ngClass]="{'show': showDeleteModal}" *ngIf="showDeleteModal">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title">Confirm Delete</h5>
+                <button type="button" class="btn-close btn-close-white" (click)="cancelDelete()"></button>
+            </div>
+            <div class="modal-body">
+                <div class="text-center mb-3">
+                    <i class="fas fa-exclamation-triangle text-danger" style="font-size: 3rem;"></i>
+                </div>
+                <p class="text-center mb-0">Are you sure you want to delete this employee?</p>
+                <p class="text-center text-muted mb-0">This action cannot be undone.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" (click)="cancelDelete()">Cancel</button>
+                <button type="button" class="btn btn-danger" (click)="confirmDelete()">
+                    <span *ngIf="loading" class="spinner-border spinner-border-sm me-1"></span>
+                    Delete Employee
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Backdrop -->
+<div class="modal-backdrop show" *ngIf="showDeleteModal"></div> 
