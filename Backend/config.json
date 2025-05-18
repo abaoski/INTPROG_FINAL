@@ -1,0 +1,20 @@
+{
+  "database": {
+    "host": "localhost",
+    "port": 3306,
+    "user": "root",
+    "password": "",
+    "database": "Group_Project_db"
+  },
+  "secret": "YOUR_JWT_SECRET_KEY_HERE",
+  "emailFrom": "admin@example.com",
+  "smtpOptions": {
+    "host": "smtp.ethereal.email",
+    "port": 587,
+    "auth": {
+      "user": "shemar.lockman18@ethereal.email",
+      "pass": "5sBknwDRRZt2kvCPwJ"
+    }
+  },
+  "useFakeBackend": false
+}
