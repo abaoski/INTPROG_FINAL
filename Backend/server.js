@@ -1,3 +1,5 @@
+// Load environment variables from .env file
+require('dotenv').config();
 require('rootpath')();
 const express = require('express');
 const app = express();
@@ -7,8 +9,10 @@ const cors = require('cors');
 const path = require('path');
 const errorHandler = require('_middleware/error-handler');
 
-// Disable SSL verification for development
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+// Only disable SSL verification in development
+if (process.env.NODE_ENV !== 'production') {
+    process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+}
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -20,8 +24,13 @@ app.use((req, res, next) => {
     next();
 });
 
+// Define the path to frontend build based on environment
+const frontendPath = process.env.NODE_ENV === 'production' 
+    ? path.join(__dirname, '../Frontend/dist/frontend')
+    : path.join(__dirname, '../frontend/dist/frontend');
+
 // Serve static files from the Angular app
-app.use(express.static(path.join(__dirname, '../frontend/dist/frontend')));
+app.use(express.static(frontendPath));
 
 // allow cors requests from any origin and with credentials
 app.use(cors({
@@ -49,12 +58,12 @@ app.use('/api-docs', require('_helpers/swagger'));
 
 // Send all other requests to the Angular app
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../frontend/dist/frontend/index.html'));
+    res.sendFile(path.join(frontendPath, 'index.html'));
 });
 
 // global error handler
 app.use(errorHandler);
 
 // start server
-const port = process.env.NODE_ENV === 'production' ? (process.env.PORT || 80) : 4000;
+const port = process.env.PORT || (process.env.NODE_ENV === 'production' ? 80 : 4000);
 app.listen(port, '0.0.0.0', () => console.log('Server listening on port ' + port));

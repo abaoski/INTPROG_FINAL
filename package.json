@@ -1,0 +1,22 @@
+{
+  "name": "angular-node-app",
+  "version": "1.0.0",
+  "description": "Angular frontend with Node.js backend",
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=8.0.0"
+  },
+  "scripts": {
+    "start": "cd Backend && npm start",
+    "build": "npm run build:frontend && npm run install:backend",
+    "build:frontend": "cd Frontend && npm install && npm run build",
+    "install:backend": "cd Backend && npm install",
+    "dev": "concurrently \"cd Backend && npm run start:dev\" \"cd Frontend && npm start\""
+  },
+  "keywords": ["angular", "node", "express", "render"],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^8.2.0"
+  }
+} 

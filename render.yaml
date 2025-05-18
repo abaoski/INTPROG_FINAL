@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: backend-api
+    env: node
+    buildCommand: cd Backend && npm install
+    startCommand: cd Backend && npm start
+    healthCheckPath: /accounts
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: JWT_SECRET
+        generateValue: true
+      - key: DB_HOST
+        value: 153.92.15.31
+      - key: DB_PORT
+        value: 3306
+      - key: DB_USER
+        value: u875409848_abao
+      - key: DB_PASSWORD
+        sync: false
+      - key: DB_NAME
+        value: u875409848_abao
+    autoDeploy: true 
