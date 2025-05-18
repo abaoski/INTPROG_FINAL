@@ -1,0 +1,94 @@
+<div class="card">
+    <h4 class="card-header">
+        {{isAddMode ? 'Add Request' : 'Edit Request'}}
+        <ng-container *ngIf="employeeId && employeeFullName">
+            for Employee #{{employeeId}} - {{employeeFullName}}
+        </ng-container>
+    </h4>
+    <div class="card-body">
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+            <!-- Employee dropdown for admin users only -->
+            <div class="mb-3" *ngIf="isAdmin">
+                <label class="form-label">Employee</label>
+                <select formControlName="employeeId" class="form-select" [ngClass]="{ 'is-invalid': submitted && f.employeeId.errors }">
+                    <option value="">Select Employee...</option>
+                    <option *ngFor="let employee of employees" [value]="employee.id">
+                        {{employee.account.title}} {{employee.account.firstName}} {{employee.account.lastName}} - {{employee.employeeId}}
+                    </option>
+                </select>
+                <div *ngIf="submitted && f.employeeId.errors" class="invalid-feedback">
+                    <div *ngIf="f.employeeId.errors.required">Employee selection is required</div>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Type</label>
+                <select formControlName="type" class="form-select" [ngClass]="{ 'is-invalid': submitted && f.type.errors }">
+                    <option value="">Choose type...</option>
+                    <option value="Equipment">Equipment</option>
+                    <option value="Leave">Leave</option>
+                    <option value="Resources">Resources</option>
+                </select>
+                <div *ngIf="submitted && f.type.errors" class="invalid-feedback">
+                    <div *ngIf="f.type.errors.required">Type is required</div>
+                </div>
+            </div>
+
+            <!-- Items section only for Equipment and Resources -->
+            <div *ngIf="showItemsSection" class="mb-3">
+                <h3>Items</h3>
+                <div class="alert alert-info" *ngIf="items.length === 0">
+                    Please add at least one item for Equipment or Resources requests.
+                </div>
+                <div formArrayName="items">
+                    <div *ngFor="let item of items.controls; let i=index" [formGroupName]="i" class="row mb-2" [class.d-none]="isItemHidden(i)">
+                        <div class="col-5">
+                            <input type="text" formControlName="name" class="form-control" placeholder="Item name"
+                                [ngClass]="{ 'is-invalid': submitted && item.get('name')?.errors }" />
+                            <div *ngIf="submitted && item.get('name')?.errors" class="invalid-feedback">
+                                <div *ngIf="item.get('name')?.errors?.required">Item name is required</div>
+                                <div *ngIf="item.get('name')?.errors?.maxlength">Item name must be less than 100 characters</div>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <input type="number" formControlName="quantity" class="form-control" placeholder="Quantity"
+                                [ngClass]="{ 'is-invalid': submitted && item.get('quantity')?.errors }" />
+                            <div *ngIf="submitted && item.get('quantity')?.errors" class="invalid-feedback">
+                                <div *ngIf="item.get('quantity')?.errors?.required">Quantity is required</div>
+                                <div *ngIf="item.get('quantity')?.errors?.min">Quantity must be at least 1</div>
+                                <div *ngIf="item.get('quantity')?.errors?.max">Quantity must be less than 10000</div>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <button type="button" (click)="removeItem(i)" class="btn btn-danger me-2" *ngIf="!isItemHidden(i)">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                            <button type="button" (click)="restoreItem(i)" class="btn btn-secondary" *ngIf="isItemHidden(i)">
+                                <i class="fas fa-undo"></i> Restore
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-2">
+                    <button type="button" (click)="addItem()" class="btn btn-secondary">Add Item</button>
+                </div>
+                <div *ngIf="submitted && form.get('type')?.value !== 'Leave' && items.length === 0" class="text-danger mt-2">
+                    At least one item is required for Equipment and Resources requests
+                </div>
+            </div>
+
+            <!-- Message for Leave requests -->
+            <div *ngIf="form.get('type')?.value === 'Leave'" class="alert alert-info mb-3">
+                Leave requests do not require any items. You can proceed with submitting the request.
+            </div>
+
+            <div class="mt-4">
+                <button [disabled]="loading" class="btn btn-primary">
+                    <span *ngIf="loading" class="spinner-border spinner-border-sm me-1"></span>
+                    Save Request
+                </button>
+                <button type="button" (click)="onCancel()" class="btn btn-link">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div> 

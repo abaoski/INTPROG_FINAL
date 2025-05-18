@@ -1,0 +1,167 @@
+<div class="card">
+    <div class="card-header">
+        <div class="d-flex justify-content-between align-items-center">
+            <h2 class="mb-0">
+                <ng-container *ngIf="!employeeId">All Requests</ng-container>
+                <ng-container *ngIf="employeeId">Employee Requests</ng-container>
+            </h2>
+            <div *ngIf="employeeId">
+                <a routerLink="/requests" class="btn btn-secondary">View All Requests</a>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <div *ngIf="loading" class="text-center">
+            <span class="spinner-border spinner-border-lg align-center"></span>
+        </div>
+        <div *ngIf="!loading && notFound" class="alert alert-warning">
+            No requests found for Employee #{{employeeId}}
+        </div>
+        <table *ngIf="!loading && !notFound && requests.length > 0" class="table table-professional table-professional-primary table-professional-striped">
+            <thead>
+                <tr>
+                    <th class="text-center" style="width: 12%">Request #</th>
+                    <th class="text-center" style="width: 10%">Type</th>
+                    <th class="text-center" style="width: 20%">Items</th>
+                    <th class="text-center" style="width: 10%">Status</th>
+                    <th class="text-center" style="width: 18%">Created</th>
+                    <th class="text-center" style="width: 15%">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let request of requests">
+                    <td class="text-center align-middle">{{request.id}}</td>
+                    <td class="text-center align-middle">{{request.type}}</td>
+                    <td class="text-center align-middle">
+                        <ng-container *ngIf="request.type !== 'Leave'">
+                            <div *ngIf="!request.items?.length" class="text-muted">
+                                No items
+                            </div>
+                            <div *ngIf="request.items?.length" [title]="getItemsTooltip(request)">
+                                <ng-container *ngIf="!isExpanded(request.id)">
+                                    <div class="d-flex align-items-center">
+                                        <span class="text-truncate">{{getVisibleItems(request).slice(0, itemsPerRow).join(', ')}}</span>
+                                        <button *ngIf="hasMoreItems(request)" 
+                                                (click)="toggleExpand(request.id)" 
+                                                class="btn btn-link btn-sm p-0 ms-1">
+                                            {{getToggleText(request)}}
+                                        </button>
+                                    </div>
+                                </ng-container>
+                                <ng-container *ngIf="isExpanded(request.id)">
+                                    <div class="items-list">
+                                        <div *ngFor="let item of getVisibleItems(request)" class="item-line">
+                                            {{item}}
+                                        </div>
+                                        <button (click)="toggleExpand(request.id)" 
+                                                class="btn btn-link btn-sm p-0">
+                                            {{getToggleText(request)}}
+                                        </button>
+                                    </div>
+                                </ng-container>
+                                <small class="text-muted d-block">
+                                    {{request.items?.length === 0 ? 'No items' : 
+                                      request.items?.length === 1 ? '1 Item' : 
+                                      request.items?.length + ' Items'}}
+                                </small>
+                            </div>
+                        </ng-container>
+                        <span *ngIf="request.type === 'Leave'" class="text-muted">N/A</span>
+                    </td>
+                    <td class="text-center align-middle">
+                        <span class="badge-status" [ngClass]="{
+                            'badge-status-secondary': request.status === 'Pending',
+                            'badge-status-success': request.status === 'Approved',
+                            'badge-status-danger': request.status === 'Rejected'
+                        }">{{request.status}}</span>
+                    </td>
+                    <td class="text-center align-middle">{{request.createdDate | date:'medium'}}</td>
+                    <td class="text-center align-middle" style="white-space: nowrap">
+                        <a routerLink="view/{{request.id}}" class="btn btn-sm btn-primary me-1">View</a>
+                        <!-- Edit, Delete, and Status Change buttons only for admin -->
+                        <ng-container *ngIf="isAdmin">
+                            <a routerLink="edit/{{request.id}}" class="btn btn-sm btn-warning me-1">Edit</a>
+                            <div class="btn-group me-1">
+                                <button type="button" class="btn btn-sm btn-info dropdown-toggle" data-bs-toggle="dropdown" [disabled]="request.isUpdating">
+                                    <span *ngIf="request.isUpdating" class="spinner-border spinner-border-sm me-1"></span>
+                                    Status
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" (click)="changeStatus(request.id, 'Pending')" [class.disabled]="request.status === 'Pending'">
+                                        <span class="badge-status badge-status-secondary me-2">Pending</span>
+                                    </a></li>
+                                    <li><a class="dropdown-item" (click)="changeStatus(request.id, 'Approved')" [class.disabled]="request.status === 'Approved'">
+                                        <span class="badge-status badge-status-success me-2">Approved</span>
+                                    </a></li>
+                                    <li><a class="dropdown-item" (click)="changeStatus(request.id, 'Rejected')" [class.disabled]="request.status === 'Rejected'">
+                                        <span class="badge-status badge-status-danger me-2">Rejected</span>
+                                    </a></li>
+                                </ul>
+                            </div>
+                            <button (click)="openDeleteModal(request)" class="btn btn-sm btn-danger" [disabled]="request.isDeleting">
+                                <span *ngIf="request.isDeleting" class="spinner-border spinner-border-sm me-1"></span>
+                                <span *ngIf="!request.isDeleting">Delete</span>
+                            </button>
+                        </ng-container>
+                    </td>
+                </tr>
+                <tr *ngIf="!loading && !notFound && requests?.length === 0">
+                    <td colspan="7" class="text-center">
+                        <span class="text-muted">No requests found</span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="deleteModalLabel">Confirm Delete</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete request <strong>#{{selectedRequest?.requestNumber}}</strong>?</p>
+                <p class="mb-0 text-danger">This action cannot be undone.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger" (click)="confirmDelete()" [disabled]="isDeleting">
+                    <span *ngIf="isDeleting" class="spinner-border spinner-border-sm me-1"></span>
+                    Delete Request
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .btn-link.btn-sm {
+        text-decoration: none;
+        color: #0d6efd;
+        font-size: 0.875rem;
+        font-weight: 500;
+    }
+    .btn-link.btn-sm:hover {
+        text-decoration: underline;
+    }
+    .text-truncate {
+        max-width: 100%;
+        display: inline-block;
+    }
+    td .d-flex {
+        gap: 0.25rem;
+    }
+    .items-list {
+        margin-bottom: 0.25rem;
+    }
+    .item-line {
+        line-height: 1.4;
+    }
+    .item-line:not(:last-child) {
+        margin-bottom: 0.125rem;
+    }
+</style> 
